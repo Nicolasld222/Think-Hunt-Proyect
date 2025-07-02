@@ -536,3 +536,47 @@ color: #00ff88;
     filter: drop-shadow(0 0 6px #05f1c0);
   }
 }
+
+
+/*------Alertas------*/
+/* Siempre oculto por defecto */
+.alerta-oculta {
+  display: none !important;
+}
+
+#alerta-personalizada {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(10, 10, 10, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.alerta-contenido {
+  background-color: #0a0a0a;
+  border: 2px solid #00ff88;
+  border-radius: 25px;
+  padding: 30px;
+  text-align: center;
+  color: #00ff88;
+  font-size: 20px;
+  filter: drop-shadow(0 0 6px #00ff88);
+  max-width: 400px;
+}
+
+.alerta-contenido button {
+  margin-top: 20px;
+  background: linear-gradient(90deg, #05f1c0 50%, #00ff88 100%);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+  width: 200px;
+  height: 35px;
+  cursor: pointer;
+}
