@@ -1,0 +1,67 @@
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #0a0a0a 65%, #00664d 80%, #00ff88 100%);;;
+  overflow: hidden;
+  height: 100vh;
+}
+
+
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none; /* importante: para que no bloquee clics */
+}
+
+.particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #00ff88;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: float 10s linear infinite;
+  filter: drop-shadow(0 0 6px #00ff88);
+}
+/* Posiciones iniciales aleatorias */
+.particle:nth-child(1) { top: 90%; left: 10%; animation-duration: 12s; }
+.particle:nth-child(2) { top: 95%; left: 30%; animation-duration: 14s; }
+.particle:nth-child(3) { top: 92%; left: 50%; animation-duration: 10s; }
+.particle:nth-child(4) { top: 98%; left: 70%; animation-duration: 13s; }
+.particle:nth-child(5) { top: 96%; left: 90%; animation-duration: 11s; }
+.particle:nth-child(6) { top: 92%; left: 20%; animation-duration: 10s; }
+.particle:nth-child(7) { top: 98%; left: 40%; animation-duration: 13s; }
+.particle:nth-child(8) { top: 96%; left: 60%; animation-duration: 11s; }
+.particle:nth-child(9) { top: 92%; left: 80%; animation-duration: 10s; }
+.particle:nth-child(10) { top: 98%; left: 95%; animation-duration: 13s; }
+.particle:nth-child(11) { top: 96%; left: 05%; animation-duration: 11s; }
+.particle:nth-child(12) { top: 98%; left: 85%; animation-duration: 13s; }
+.particle:nth-child(13) { top: 96%; left: 15%; animation-duration: 11s; }
+.particle:nth-child(14) { top: 98%; left: 75%; animation-duration: 13s; }
+.particle:nth-child(15) { top: 96%; left: 25%; animation-duration: 11s; }
+.particle:nth-child(16) { top: 98%; left: 65%; animation-duration: 13s; }
+.particle:nth-child(17) { top: 96%; left: 45%; animation-duration: 11s; }
+.particle:nth-child(18) { top: 98%; left: 35%; animation-duration: 13s; }
+.particle:nth-child(19) { top: 96%; left: 55%; animation-duration: 11s; }
+.particle:nth-child(20) { top: 98%; left: 68%; animation-duration: 13s; }
+.particle:nth-child(21) { top: 96%; left: 52%; animation-duration: 11s; }
+
+
+@keyframes float {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-100vh) scale(0.5);
+    opacity: 0;
+  }
+}
+h1, h2{
+    color: #00ff88;
+    filter: drop-shadow(0 0 6px #05f1c0);
+}
