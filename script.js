@@ -152,3 +152,131 @@ function aplicarEstilos(colores) {
     document.head.appendChild(estilo);
   }
 }
+// 💬 IA lógica (no modificada, puedes mantener la tuya)
+const GEMINI_API_KEY = 'AIzaSyDHXI-o5Seo3QuEanDaH6JgkbBRlc1OqZc';
+let historialIA = [];
+let preguntaActual = "";
+
+async function inicializarJuegoBasico() {
+  const categoria = obtenerCategoriaBasica();
+  historialIA = [];
+
+  const prompt = `
+    Estás jugando a adivinar en qué está pensando el usuario en la categoría "${categoria}".
+    Haz preguntas cerradas que puedan responderse con: Sí, No, Tal vez o No sé.
+    Cuando creas que sabes la respuesta, haz una suposición final con este formato exacto:
+    "He adivinado tu ${categoria}: es un [respuesta]".
+    Solo responde con una pregunta o suposición. Responde en español.`;
+
+  try {
+    mostrarCargando();
+    const pregunta = await llamarGemini(prompt);
+    preguntaActual = pregunta.trim();
+    mostrarPregunta(preguntaActual);
+  } catch (error) {
+    mostrarError('Error al inicializar la IA.');
+  }
+}
+
+async function procesarRespuestaBasica(respuestaUsuario) {
+  const categoria = obtenerCategoriaBasica();
+  historialIA.push({ pregunta: preguntaActual, respuesta: respuestaUsuario });
+
+  const historialTexto = historialIA.map(item => `IA: ${item.pregunta}\nUsuario: ${item.respuesta}`).join('\n');
+
+  const prompt = `
+    Estás jugando a adivinar en menos preguntas posibles en la categoría "${categoria}".
+    Aquí está la conversación hasta ahora:
+    ${historialTexto}
+    Recuerda: responde con una nueva pregunta o con:
+    "He adivinado tu ${categoria}: es un [respuesta]"`;
+
+  try {
+    mostrarCargando();
+    const siguientePregunta = await llamarGemini(prompt);
+    preguntaActual = siguientePregunta.trim();
+    mostrarPregunta(preguntaActual);
+
+    if (preguntaActual.toLowerCase().includes(`he adivinado tu ${categoria}`)) {
+      mostrarAlerta(`🎯 ¡La IA adivinó tu ${categoria}!\n${preguntaActual}`);
+      mostrarPregunta("🎉 ¡Gracias por jugar!");
+      ['Yes', 'No', 'NoSeSabe', 'Maybe'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.disabled = true;
+      });
+    }
+
+  } catch (error) {
+    console.error("Error:", error);
+    mostrarError('Error al generar la pregunta.');
+  }
+}
+
+function obtenerCategoriaBasica() {
+  const url = window.location.pathname;
+  if (url.includes("AnimalesCat")) return "animales";
+  if (url.includes("FamososCat")) return "famosos";
+  if (url.includes("ObjetosCat")) return "objetos";
+  if (url.includes("VideoJuegosCat")) return "videojuegos";
+  return "general";
+}
+
+function mostrarPregunta(pregunta) {
+  const respuestaDiv = document.getElementById('respuesta');
+  if (respuestaDiv) {
+    respuestaDiv.innerHTML = `<p>${pregunta}</p>`;
+    respuestaDiv.style.display = 'block';
+  }
+}
+
+function mostrarCargando() {
+  const respuestaDiv = document.getElementById('respuesta');
+  if (respuestaDiv) {
+    respuestaDiv.innerHTML = '<p>Pensando... 🤔</p>';
+    respuestaDiv.style.display = 'block';
+  }
+}
+
+function mostrarError(mensaje) {
+  const respuestaDiv = document.getElementById('respuesta');
+  if (respuestaDiv) {
+    respuestaDiv.innerHTML = `<p style="color: #ff6b6b;">${mensaje}</p>`;
+    respuestaDiv.style.display = 'block';
+  }
+}
+
+async function llamarGemini(prompt) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const body = { contents: [{ parts: [{ text: prompt }] }] };
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+
+    const data = await res.json();
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Sin respuesta de Gemini.';
+  } catch (error) {
+    return "Error al conectar con la IA.";
+  }
+}
+
+function mostrarAlerta(mensaje) {
+  const alerta = document.getElementById('alerta-personalizada');
+  const mensajeElemento = document.getElementById('mensaje-alerta');
+  if (alerta && mensajeElemento) {
+    mensajeElemento.textContent = mensaje;
+    alerta.classList.remove('alerta-oculta');
+  }
+}
+
+function ocultarAlerta() {
+  const alerta = document.getElementById('alerta-personalizada');
+  if (alerta) {
+    alerta.classList.add('alerta-oculta');
+  }
+}
