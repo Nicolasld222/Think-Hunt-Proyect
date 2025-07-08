@@ -198,7 +198,7 @@ async function procesarRespuestaBasica(respuestaUsuario) {
     mostrarPregunta(preguntaActual);
 
     if (preguntaActual.toLowerCase().includes(`he adivinado tu ${categoria}`)) {
-      mostrarAlerta(`🎯 ¡La IA adivinó tu ${categoria}!\n${preguntaActual}`);
+      mostrarAlerta(`🎯 ¡La IA adivinó lo que pensabas`);
       mostrarPregunta("🎉 ¡Gracias por jugar!");
       ['Yes', 'No', 'NoSeSabe', 'Maybe'].forEach(id => {
         const btn = document.getElementById(id);
